@@ -86,6 +86,8 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .logo-mark {
@@ -109,9 +111,10 @@
 
   .nav-links {
     display: flex;
-    gap: 32px;
+    gap: 28px;
     list-style: none;
     font-size: 0.95rem;
+    white-space: nowrap;
   }
 
   .nav-links a:hover { color: var(--terracotta); }
@@ -122,6 +125,8 @@
     padding: 10px 22px;
     border-radius: 999px;
     font-size: 0.9rem;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .nav-cta:hover { background: var(--terracotta); }
@@ -134,12 +139,22 @@
     cursor: pointer;
   }
 
-  @media (max-width: 780px) {
-    .nav-links, .nav-cta { display: none; }
+  /* On desktop, the panel is transparent to layout: its children (the nav
+     links and the CTA button) act as direct flex items of .nav, same as
+     before. On narrow screens it becomes the toggled dropdown. */
+  .nav-mobile-panel {
+    display: contents;
+  }
+
+  @media (max-width: 1040px) {
     .menu-btn { display: block; }
-    .nav-links.open {
+    .nav-mobile-panel {
+      display: none;
+    }
+    .nav-mobile-panel.open {
       display: flex;
       flex-direction: column;
+      align-items: flex-start;
       position: absolute;
       top: 64px;
       left: 0;
@@ -149,9 +164,9 @@
       padding: 20px 24px;
       gap: 18px;
     }
-    .nav-cta.open {
-      display: inline-block;
-      margin: 0 24px 20px;
+    .nav-mobile-panel.open .nav-links {
+      flex-direction: column;
+      gap: 18px;
     }
   }
 
@@ -267,10 +282,63 @@
   }
   .credentials li::before { content: "— "; color: var(--terracotta); }
 
+  /* The Space */
+  .space { background: var(--tint-periwinkle); }
+  .space-wrap {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .space-photo {
+    aspect-ratio: 5/3;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 40px;
+  }
+  .space-wrap .eyebrow { text-align: center; }
+  .space-wrap h2 { text-align: center; font-size: 2rem; margin-bottom: 32px; }
+  .space-copy p {
+    color: #4a453e;
+    font-size: 1.02rem;
+    margin-bottom: 20px;
+  }
+  .space-copy h3 {
+    font-family: Georgia, serif;
+    font-size: 1.3rem;
+    color: var(--ink);
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+    margin-bottom: 14px;
+  }
+  .dash-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.98rem;
+    color: #4a453e;
+    margin-bottom: 16px;
+  }
+  .dash-list li::before { content: "— "; color: var(--terracotta); }
+  .equipment-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  .equipment-grid h4 {
+    font-family: Georgia, serif;
+    font-size: 1.02rem;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  @media (max-width: 700px) {
+    .equipment-grid { grid-template-columns: 1fr; gap: 20px; }
+  }
+
   /* Services */
   .services-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
   }
 
@@ -281,11 +349,12 @@
     padding: 28px 24px;
   }
 
-  .service-card h3 { font-size: 1.15rem; margin-bottom: 10px; }
+  .service-card h3 { font-size: 1.15rem; margin-bottom: 4px; }
+  .service-card .duration { font-size: 0.8rem; color: var(--olive); margin-bottom: 10px; display: block; }
   .service-card p { color: #55504a; font-size: 0.9rem; margin-bottom: 14px; }
   .price-tag { font-size: 0.9rem; color: var(--terracotta); font-weight: bold; }
 
-  .policy-note {
+  .info-note {
     margin-top: 32px;
     padding: 20px 24px;
     background: #fff;
@@ -294,32 +363,13 @@
     font-size: 0.9rem;
     color: #55504a;
   }
-  .policy-note strong { color: var(--ink); }
+  .info-note strong { color: var(--ink); }
 
   @media (max-width: 900px) {
     .services-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 560px) {
     .services-grid { grid-template-columns: 1fr; }
-  }
-
-  /* Offers */
-  .offers { background: var(--tint-periwinkle); }
-  .offers-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-  .offer-card {
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 28px 24px;
-  }
-  .offer-card h3 { font-size: 1.1rem; margin-bottom: 10px; color: var(--terracotta); }
-  .offer-card p { font-size: 0.92rem; color: #55504a; }
-  @media (max-width: 900px) {
-    .offers-grid { grid-template-columns: 1fr; }
   }
 
   /* Testimonials */
@@ -329,7 +379,8 @@
 
   .testi-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
+    max-width: 640px;
     gap: 32px;
   }
 
@@ -342,9 +393,6 @@
   .testi-card p { margin-bottom: 16px; font-size: 1rem; color: #ece7de; }
   .testi-name { font-size: 0.9rem; color: var(--pink); }
 
-  @media (max-width: 780px) {
-    .testi-grid { grid-template-columns: 1fr; }
-  }
 
   /* Gallery */
   .gallery-grid {
@@ -403,14 +451,16 @@
 <header>
   <div class="nav">
     <div class="logo"><img class="logo-mark" alt="Control with Nicole Pilates logo"> Control with Nicole Pilates</div>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#about">About</a></li>
-      <li><a href="#services">Sessions</a></li>
-      <li><a href="#offers">Offers</a></li>
-      <li><a href="#testimonials">Testimonials</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <a href="#contact" class="btn nav-cta" id="navCta">Book a Session</a>
+    <div class="nav-mobile-panel" id="navMobilePanel">
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Sessions</a></li>
+        <li><a href="#space">The Space</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#contact" class="btn nav-cta" id="navCta">Book a Session</a>
+    </div>
     <button class="menu-btn" id="menuBtn">☰</button>
   </div>
 </header>
@@ -452,11 +502,6 @@
       <p>What Joe forgot to mention is that somewhere during that time you'll find a new outlook on life, too.</p>
       <p>Wherever you're starting from, I'll meet you there and we'll embark on this journey together, one session at a time.</p>
     </div>
-    <ul class="credentials">
-      <li>500-Hour Pilates Certification</li>
-      <li>[Certifying institute name]</li>
-      <li>[Any specialties — pre/postnatal, rehab, athletic performance, etc.]</li>
-    </ul>
   </div>
 </section>
 
@@ -469,51 +514,96 @@
     </div>
     <div class="services-grid">
       <div class="service-card">
-        <h3>Intro Session</h3>
-        <p>New to working with me? Start here — a chance to try Pilates together and talk through your goals before committing to a package.</p>
-        <div class="price-tag">$45 / first session</div>
+        <h3>First Session</h3>
+        <span class="duration">75 minutes</span>
+        <p>Your first session is about getting to know you. We'll spend the first 15 minutes talking through your wellness goals and your body — any injuries, past surgeries or joint replacements, pregnancy or postpartum considerations, conditions like Osteoporosis, Ehlers-Danlos, or anything else I should know to keep you safe and comfortable. From there, we move into a full 60-minute workout tailored to what we just talked about.</p>
+        <div class="price-tag">$75</div>
       </div>
       <div class="service-card">
         <h3>Single Session</h3>
-        <p>One-on-one, fully customized to your goals and any injuries or limitations.</p>
-        <div class="price-tag">$75 / session</div>
+        <span class="duration">60 minutes · returning clients</span>
+        <p>Before we meet, just share your goal for the session, any updates on how your body's feeling, and — if you have one — a preferred piece of equipment. Note: this option is for clients who've already completed a First Session.</p>
+        <div class="price-tag">$75</div>
       </div>
       <div class="service-card">
-        <h3>5-Session Package</h3>
-        <p>A small commitment to build consistency, at a discount per session.</p>
-        <div class="price-tag">$350 total</div>
+        <h3>4-Pack</h3>
+        <span class="duration">Four 60-minute sessions</span>
+        <p>A great way to build consistency and start feeling the difference session over session.</p>
+        <div class="price-tag">$280 ($70/session)</div>
       </div>
       <div class="service-card">
-        <h3>10-Session Package</h3>
-        <p>Best value for clients ready to make Pilates a regular part of their routine.</p>
-        <div class="price-tag">$650 total</div>
+        <h3>8-Pack</h3>
+        <span class="duration">Eight 60-minute sessions</span>
+        <p>For clients ready to commit to steady progress — ideal if you're working toward a specific goal.</p>
+        <div class="price-tag">$520 ($65/session)</div>
+      </div>
+      <div class="service-card">
+        <h3>12-Pack</h3>
+        <span class="duration">Twelve 60-minute sessions</span>
+        <p>Our best value for clients making Pilates a regular part of their routine.</p>
+        <div class="price-tag">$720 ($60/session)</div>
       </div>
     </div>
-    <div class="policy-note">
-      <strong>Cancellation policy:</strong> 24+ hours notice is free. 12–24 hours is a 50% charge. Less than 12 hours is charged in full. A credit card on file is required to book.
+    <div class="info-note">
+      <strong>Accepted forms of payment:</strong> Cash, card, Venmo, and Square.
     </div>
   </div>
 </section>
 
-<section class="offers" id="offers">
-  <div class="section-inner">
-    <div class="section-head">
-      <div class="eyebrow">New Client Offers</div>
-      <h2>Getting started</h2>
+<section class="space" id="space">
+  <div class="section-inner space-wrap">
+    <div class="space-photo">
+      <div class="ph-img" style="height:100%;">[ Photo of the studio ]</div>
     </div>
-    <div class="offers-grid">
-      <div class="offer-card">
-        <h3>Grand Opening</h3>
-        <p>Your first session is $45, or start with 3 intro sessions for $120.</p>
+    <div class="eyebrow">The Space</div>
+    <h2>Completely Private, Completely Yours</h2>
+    <div class="space-copy">
+      <p>This is a studio built entirely around you — no other clients, no classes to work around. It's just you and me, for the full session. There are no children and no dogs on the property; cats are kept on a separate floor, away from the studio. You'll always find easy parking in the driveway or on the street, with your own private entrance: no studio lot, no circling for a spot.</p>
+      <p>Every surface and piece of equipment is cleaned both before and after your session, not a quick pass between clients, but a genuine reset each time, so you're always stepping onto equipment that's spotless. Keeping the studio in pristine condition for you is a top priority, every visit.</p>
+
+      <h3>Pricing That Makes Sense</h3>
+      <p>Corporate studios typically charge $90 or more for a 50-minute private session, often on a single piece of equipment. Here, a full 60-minute session gives you access to a complete suite of studio-grade apparatus most studios don't carry all in one place, at a more competitive rate, without the overhead of a large facility built into the price.</p>
+
+      <h3>Credentials You Can Trust</h3>
+      <p>I'm a certified Pilates instructor with a 500-hour certification through Club Pilates, fully insured, and bring two years of studio experience, including time at Club Pilates and Rich Movement Pilates. That means the same training and attention to detail you'd expect from a corporate studio, in a space designed just for you.</p>
+
+      <h3>The Studio Itself</h3>
+      <p>Tucked into a fully finished, 1,000-square-foot basement, the space has a calm, bright feel. You'll have a comfortable sitting area to change out of street shoes and store your belongings before we begin.</p>
+
+      <h3>Equipment</h3>
+      <p>Every piece is studio-grade Balanced Body equipment:</p>
+      <div class="equipment-grid">
+        <div>
+          <h4>Studio Equipment</h4>
+          <ul class="dash-list">
+            <li>Trapeze Table — with trapeze, push-through bar, and additional apparatus</li>
+            <li>Reformer</li>
+            <li>EXO Split-Pedal Chair</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Props Available During Sessions</h4>
+          <ul class="dash-list">
+            <li>Magic Circle</li>
+            <li>Dowel</li>
+            <li>Free Weights</li>
+            <li>Pilates Ball</li>
+            <li>Pilates Mat</li>
+          </ul>
+        </div>
       </div>
-      <div class="offer-card">
-        <h3>Referral Reward</h3>
-        <p>Bring a friend — you'll both get $20 off your next session.</p>
-      </div>
-      <div class="offer-card">
-        <h3>Leave a Review</h3>
-        <p>After your first 3 sessions, leave a Google review and get $10 off your next one.</p>
-      </div>
+
+      <h3>Sanitation &amp; Safety</h3>
+      <p>Equipment is cleaned with a natural disinfectant both before and after every session, not just a wipe-down, but a full reset. Sweat towels are provided and freshly laundered after each use, so you're always working with a clean one.</p>
+
+      <h3>Amenities &amp; Small Luxuries</h3>
+      <ul class="dash-list">
+        <li>Private entrance and private bathroom, stocked with toiletries</li>
+        <li>Mini fridge with assorted waters and energy drinks</li>
+        <li>Bluetooth-connected sound system: play from Spotify, Apple Music, or your own playlist</li>
+        <li>A dedicated sitting area to change out of street shoes and store or hang your belongings</li>
+        <li>Dynamic, color-changing lighting to set the mood of your session</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -526,12 +616,8 @@
     </div>
     <div class="testi-grid">
       <div class="testi-card">
-        <p>"[Placeholder testimonial — swap in a real quote from a client about their experience and results.]"</p>
-        <div class="testi-name">— [Client Name]</div>
-      </div>
-      <div class="testi-card">
-        <p>"[Placeholder testimonial — swap in a real quote from a client about their experience and results.]"</p>
-        <div class="testi-name">— [Client Name]</div>
+        <p>"I've been battling pain for years after getting a spinal fusion. After just a few sessions with Nicole, I've had significant pain reduction and considerably improved mobility! I would recommend Nicole to anyone dealing with chronic pain."</p>
+        <div class="testi-name">— Zach H</div>
       </div>
     </div>
   </div>
@@ -557,11 +643,10 @@
     <div class="contact-info">
       <div class="eyebrow">Get In Touch</div>
       <h2>Book your first session</h2>
-      <p style="margin-top:16px;">📍 In-home sessions within [X] miles of [City, State]</p>
-      <p>📞 <a href="tel:+15555555555">[Phone number]</a></p>
+      <p style="margin-top:16px;">📞 <a href="tel:+14025122051">402-512-2051</a></p>
       <p>✉️ <a href="mailto:controlwithnicolepilates@gmail.com">controlwithnicolepilates@gmail.com</a></p>
-      <p>🕐 [Hours, e.g. Mon–Fri, 7am–6pm]</p>
-      <p style="margin-top:16px;">Fill out the form and I'll follow up within [24 hours] to schedule your first session.</p>
+      <p>🕐 Mon–Fri, 7am–6pm</p>
+      <p style="margin-top:16px;">Fill out the form and I'll follow up within 24 hours to schedule your first session.</p>
     </div>
     <form id="contactForm">
       <input type="text" name="name" placeholder="Name" required>
@@ -613,11 +698,12 @@
     });
   });
   const menuBtn = document.getElementById('menuBtn');
-  const navLinks = document.getElementById('navLinks');
-  const navCta = document.getElementById('navCta');
+  const navMobilePanel = document.getElementById('navMobilePanel');
   menuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('open');
-    navCta.classList.toggle('open');
+    navMobilePanel.classList.toggle('open');
+  });
+  navMobilePanel.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => navMobilePanel.classList.remove('open'));
   });
 </script>
 
